@@ -1,16 +1,24 @@
 import flask
 
-from flask import request, jsonify
+from flask import request
 from flask import json
 
+'''
+    {
+        num_ip: 172.20.174.253,
+        num_mask: 24
+    }
+'''
 app = flask.Flask(__name__)
 
-@app.route('/teste/<num_ip>/<num_mask>',)
-def calcula(num_ip, num_mask):
+@app.route('/teste', methods=["POST"])
+def calcula():
 
-    ip = num_ip #str(input("Digite seu ip: \n")) #Recebendo o IP
+    ip_recebido = request.get_json()
+    
+    ip = ip_recebido['num_ip'] #str(input("Digite seu ip: \n")) #Recebendo o IP
     listIp = ip.split(".") # Convertendo a string em lista separando por pontos
-    mask = num_mask  #int(input("Digite a mascara de rede: \n")) # Recebendo mascara de rede
+    mask = ip_recebido['num_mask']  #int(input("Digite a mascara de rede: \n")) # Recebendo mascara de rede
 
     #função que converta em binario
     def converteBinario(numeroBinarios):
@@ -84,9 +92,7 @@ def calcula(num_ip, num_mask):
     }
 
     dados = json.dumps(octetos)
-    num_ip = dados
-
     
-    return num_ip
+    return dados
 
 app.run()
